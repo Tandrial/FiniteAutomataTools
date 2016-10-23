@@ -81,4 +81,17 @@ public class Iteration extends Expression {
   protected void setId() {
     t1.setId();
   }
+
+  @Override
+  protected void calcFollowPos() {
+    t1.calcFollowPos();
+    // If n is a star-node, and i is a position in lastpos(n), then all
+    // positions in firstpos(n) are in followpos(i).
+    for (Integer last : t1.getLastPos()) {
+      if (!followPosLookUp.containsKey(last)) {
+        followPosLookUp.put(last, new HashSet<>());
+      }
+      followPosLookUp.get(last).addAll(t1.getFirstPos());
+    }
+  }
 }

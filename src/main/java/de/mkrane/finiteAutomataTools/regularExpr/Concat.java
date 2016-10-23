@@ -105,4 +105,25 @@ public class Concat extends Expression {
     t1.setId();
     t2.setId();
   }
+
+  @Override
+  protected void calcFollowPos() {
+    t1.calcFollowPos();
+    t2.calcFollowPos();
+    // If n is a cat-node with left child c1 and right child c2, then for every
+    // position i in lastpos(c_1), all positions in firstpos(c_2) are in
+    // followpos(i).
+
+    // look at each cat-node, and put each position in firrstpos of its right
+    // child in followpos for each position in lastpos of its left child.
+    for (Integer follow : t2.getFirstPos()) {
+      for (Integer last : t1.getLastPos()) {
+        if (!followPosLookUp.containsKey(last)) {
+          followPosLookUp.put(last, new HashSet<>());
+        }
+        followPosLookUp.get(last).add(follow);
+      }
+    }
+
+  }
 }

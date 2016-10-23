@@ -100,4 +100,10 @@ public class Alternative extends Expression {
     t1.setId();
     t2.setId();
   }
+
+  @Override
+  protected void calcFollowPos() {
+    t1.calcFollowPos();
+    t2.calcFollowPos();
+  }
 }

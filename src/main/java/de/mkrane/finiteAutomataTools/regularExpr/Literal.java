@@ -9,7 +9,6 @@ import de.mkrane.finiteAutomataTools.finiteAutomata.State;
 public class Literal extends Expression {
 
   String c;
-  int    position;
 
   public Literal(String s) {
     this.c = s;
@@ -57,7 +56,7 @@ public class Literal extends Expression {
   public Set<Integer> getFirstPos() {
     Set<Integer> result = new HashSet<>();
     if (!c.equals("\u03b5"))
-      result.add(Integer.valueOf(position));
+      result.add(Integer.valueOf(id));
     return result;
   }
 
@@ -70,5 +69,13 @@ public class Literal extends Expression {
   protected void setId() {
     if (!c.equals("\u03b5"))
       this.id = getNextID();
+  }
+
+  @Override
+  protected void calcFollowPos() {
+    if (!literalLookUp.containsKey(c)) {
+      literalLookUp.put(c, new HashSet<>());
+    }
+    literalLookUp.get(c).add(Integer.valueOf(this.id));
   }
 }

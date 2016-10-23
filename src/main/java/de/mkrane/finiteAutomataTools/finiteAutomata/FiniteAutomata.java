@@ -130,6 +130,7 @@ public abstract class FiniteAutomata {
     NFA nfa = e.toNFA(false);
     logger.append("[+] NFA done");
     logger.append(nfa);
+
     logger.append("[+] Converting to DFA\n");
     DFA dfa = nfa.convertToDFA();
     if (!sameLanguage(nfa, dfa, testCases)) {
@@ -138,6 +139,7 @@ public abstract class FiniteAutomata {
       return null;
     }
     logger.append(dfa);
+
     logger.append("[+] Minimizing DFA\n");
     DFA dfa_min = dfa.minimize();
 
@@ -147,9 +149,18 @@ public abstract class FiniteAutomata {
       return null;
     }
     logger.append(dfa_min);
+
+    DFA dfa_direkt = e.toDFA(false);
+
+    if (!sameLanguage(dfa_direkt, dfa_min, testCases)) {
+      logger.append("[+] Direkt creation from RegularExpression failed!\n");
+      saveSBToFile(logger, "Log.txt");
+      return null;
+    }
+
     logger.append("[+] All tests passed! Conversion and minimization are correct!\n");
     logger.append("[+] Creating .dot and .png files of all FAs generated!\n");
-    String[] graphNames = { "DFA_minimiert", "DFA", "NFA" };
+    String[] graphNames = { "DFA_minimiert", "DFA", "DFA_direkt", "NFA" };
     FiniteAutomata[] fas = new FiniteAutomata[] { dfa_min, dfa, nfa };
 
     String dotLocation;
