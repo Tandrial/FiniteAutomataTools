@@ -1,0 +1,131 @@
+options
+{
+  STATIC = false;
+  UNICODE_INPUT = true;
+  JAVA_UNICODE_ESCAPE = true;
+}
+
+/******************************************************************************/
+/* PARSER CODE                                                                */
+/******************************************************************************/
+PARSER_BEGIN(Parser)
+package de.mkrane.finiteAutomataTools.parser;
+import java.io.*;
+import de.mkrane.finiteAutomataTools.regularExpr.*;
+
+public class Parser
+{
+  public static Expression parse(String s) throws ParseException, UnsupportedEncodingException
+  {
+    Reader streamReader = new InputStreamReader(new ByteArrayInputStream(s.getBytes()), "UTF-8");
+    return new Parser(streamReader).parseRegEx();
+  }
+}
+
+PARSER_END(Parser)
+
+/******************************************************************************/
+/* LEXICAL SPECIFICATION                                                      */
+/******************************************************************************/
+
+TOKEN :
+{
+  < ITERATION : "*" >
+| < ALTERNATIVE : "|" >
+| < LPARAN : "(" >
+| < RPARAN : ")" >
+| < LITERAL :
+    (
+      "ε"
+    | [ "a"-"z" ]
+    | [ "A"-"Z" ]
+    | [ "0"-"9" ]
+    ) >
+}
+
+SKIP :
+{
+  < " "
+  | "\t"
+  | "\n"
+  | "\r" >
+}
+
+/******************************************************************************/
+/* SYNTACTICAL SPECIFICATION                                                  */
+/*                                                                            */
+/* <RegEx>  ::= <Term> ( <ALTERNATIVE> <RegEx> )*                             */
+/* <Term>   ::= ( <Factor> )+                                                 */
+/* <Factor> ::= <Base> ( <ITERATION> )*                                       */
+/* <Base>   ::= <LPARAN> <RegEx> <RPARAN> | <LITERAL>                         */
+/*                                                                            */
+/******************************************************************************/
+
+Expression parseRegEx() :
+{
+  Expression t1 = null;
+  Expression t2 = null;
+}
+{
+  t1 = parseTerm()
+  (
+    < ALTERNATIVE > t2 = parseTerm()
+    {
+      t1 = new Alternative(t1, t2);
+    }
+  )*
+  {
+    return t1;
+  }
+}
+
+Expression parseTerm() :
+{
+  Expression t1 = null;
+  Expression t2 = null;
+}
+{
+  t1 = parseFactor()
+  (
+    t2 = parseFactor()
+    {
+      t1 = new Concat(t1, t2);
+    }
+  )*
+  {
+    return t1;
+  }
+}
+
+Expression parseFactor() :
+{
+  Expression t1 = null;
+}
+{
+  t1 = parseBase()
+  (
+    < ITERATION >
+    {
+      t1 = new Iteration(t1);
+    }
+  )*
+  {
+    return t1;
+  }
+}
+
+Expression parseBase() :
+{
+  Token lit = null;
+  Expression t1 = null;
+}
+{
+  < LPARAN > t1 = parseRegEx() < RPARAN >
+  {
+    return t1;
+  }
+| lit = < LITERAL >
+  {
+    return new Literal(lit.image);
+  }
+}
