@@ -115,8 +115,6 @@ public abstract class Expression {
     dfa.renameStates();
 
     logger.append("[*] Done\n");
-    logger.append(dfa);
-    System.out.println(logger.toString());
     return dfa;
   }
 

@@ -157,7 +157,7 @@ public abstract class FiniteAutomata {
       saveSBToFile(logger, name + ".log");
       return null;
     }
-
+    logger.append(dfa_direkt);
     logger.append("[+] All tests passed! Conversion and minimization are correct!\n");
     logger.append("[+] Creating .dot and .png files of all FAs generated!\n");
     String[] graphNames = { "DFA_minimiert", "DFA_direkt", "DFA", "NFA" };
