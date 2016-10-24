@@ -5,7 +5,7 @@
 	<groupId>de.mkrane</groupId>
 	<artifactId>FiniteAutomataTools</artifactId>
 	<url>https://github.com/Tandrial/FiniteAutomataTools</url>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<packaging>jar</packaging>
 
 	<scm>
