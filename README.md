@@ -2,7 +2,7 @@
 
 Tool created for the "Übersetzerbau" class of my Master "[Internet-Sicherheit]" at the Westfälische Hochschule Gelsenkirchen.
 
-The tool is able to transform a given regular Expression into a minimized DFA. The algorithms used are described in __Compilers: Principles, Techniques, and Tools__, Chapter 3.6 Finite Automata.
+The tool is able to transform a given regular Expression into a minimized DFA. The algorithms used are described in __Compilers: Principles, Techniques, and Tools__, Chapter 3.
 
 Usage:
 ```java -jar  <OutputFileName> "<RegExpression>" [<TestCases>]*```

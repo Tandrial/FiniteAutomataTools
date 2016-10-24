@@ -22,11 +22,11 @@ import de.mkrane.finiteAutomataTools.regularExpr.Expression;
 
 public abstract class FiniteAutomata {
 
-  protected static StringBuilder logger   = new StringBuilder();
+  public static StringBuilder logger   = new StringBuilder();
 
-  protected Set<String>          alphabet = new HashSet<>();
-  private StateCollection        states   = new StateCollection();
-  protected TransitionTable      lambda   = new TransitionTable();
+  protected Set<String>       alphabet = new HashSet<>();
+  private StateCollection     states   = new StateCollection();
+  protected TransitionTable   lambda   = new TransitionTable();
 
   public abstract boolean simulate(String word);
 
@@ -135,7 +135,7 @@ public abstract class FiniteAutomata {
     DFA dfa = nfa.convertToDFA();
     if (!sameLanguage(nfa, dfa, testCases)) {
       logger.append("[+] Conversion to DFA failed!\n");
-      saveSBToFile(logger, "Log.txt");
+      saveSBToFile(logger, name + ".log");
       return null;
     }
     logger.append(dfa);
@@ -145,23 +145,23 @@ public abstract class FiniteAutomata {
 
     if (!sameLanguage(dfa, dfa_min, testCases)) {
       logger.append("[+] Minimazation of DFA failed!\n");
-      saveSBToFile(logger, "Log.txt");
+      saveSBToFile(logger, name + ".log");
       return null;
     }
     logger.append(dfa_min);
-
-    DFA dfa_direkt = e.toDFA(false);
+    logger.append("[+] Constructing DFA directly from RegularExpression\n");
+    DFA dfa_direkt = e.toDFA();
 
     if (!sameLanguage(dfa_direkt, dfa_min, testCases)) {
       logger.append("[+] Direkt creation from RegularExpression failed!\n");
-      saveSBToFile(logger, "Log.txt");
+      saveSBToFile(logger, name + ".log");
       return null;
     }
 
     logger.append("[+] All tests passed! Conversion and minimization are correct!\n");
     logger.append("[+] Creating .dot and .png files of all FAs generated!\n");
-    String[] graphNames = { "DFA_minimiert", "DFA", "DFA_direkt", "NFA" };
-    FiniteAutomata[] fas = new FiniteAutomata[] { dfa_min, dfa, nfa };
+    String[] graphNames = { "DFA_minimiert", "DFA_direkt", "DFA", "NFA" };
+    FiniteAutomata[] fas = new FiniteAutomata[] { dfa_min, dfa_direkt, dfa, nfa };
 
     String dotLocation;
     if (System.getProperty("os.name").equals("Windows 7"))

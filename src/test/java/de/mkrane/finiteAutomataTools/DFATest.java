@@ -15,7 +15,8 @@ public class DFATest {
   private static final String[] tests = new String[] { "", "aaa", "aaabbab", "abababbbbaa", "bbaabaababbbabababab",
       "ab", "bb", "ababababababababab" };
 
-  private static final String[] exprs = new String[] { "(a|b)*", "((a|ε)b*)*", "(a|b)*abb(a|b)*", "(a|b)*a(a|b)(a|b)" };
+  private static final String[] exprs = new String[] { "(a|b)*", "((a|ε)b*)*", "(a|b)*a(b)*", "(a|b)*abb(a|b)*",
+      "(a|b)*a(a|b)(a|b)" };
 
   @Test
   public void testConvertNFAToDFA() {
@@ -24,7 +25,7 @@ public class DFATest {
         Expression e = Parser.parse(expr);
         NFA nfa = e.toNFA(false);
         DFA dfa = nfa.convertToDFA();
-        assertTrue(FiniteAutomata.sameLanguage(nfa, dfa, tests));
+        assertTrue(expr + " failed to correctly convert!", FiniteAutomata.sameLanguage(nfa, dfa, tests));
       } catch (Exception e1) {
         e1.printStackTrace();
       }
@@ -39,7 +40,7 @@ public class DFATest {
         NFA nfa = e.toNFA(false);
         DFA dfa = nfa.convertToDFA();
         DFA dfa_min = dfa.minimize();
-        assertTrue(FiniteAutomata.sameLanguage(nfa, dfa_min, tests));
+        assertTrue(expr + " failed to correctly minimize!", FiniteAutomata.sameLanguage(nfa, dfa_min, tests));
       } catch (Exception e1) {
         e1.printStackTrace();
       }
@@ -52,7 +53,7 @@ public class DFATest {
       try {
         Expression e = Parser.parse(expr);
         NFA nfa = e.toNFA(false);
-        DFA dfa_direkt = e.toDFA(false);
+        DFA dfa_direkt = e.toDFA();
         assertTrue(expr + " failed to correctly convert!", FiniteAutomata.sameLanguage(nfa, dfa_direkt, tests));
       } catch (Exception e1) {
         e1.printStackTrace();

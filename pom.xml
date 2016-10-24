@@ -1,12 +1,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<name>FiniteAutomataTools</name>
 	<groupId>de.mkrane</groupId>
 	<artifactId>FiniteAutomataTools</artifactId>
+	<url>https://github.com/Tandrial/FiniteAutomataTools</url>
 	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
-	<name>FiniteAutomataTools</name>
+	<scm>
+		<url>https://github.com/Tandrial/FiniteAutomataTools</url>
+		<connection>scm:git:git://github.com/Tandrial/FiniteAutomataTools.git</connection>
+		<developerConnection>scm:git:git@github.com:Tandrial/FiniteAutomataTools.git</developerConnection>
+	</scm>
+
+	<issueManagement>
+		<url>https://github.com/Tandrial/FiniteAutomataTools/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
 
 	<properties>
 		<project.java.version>1.8</project.java.version>

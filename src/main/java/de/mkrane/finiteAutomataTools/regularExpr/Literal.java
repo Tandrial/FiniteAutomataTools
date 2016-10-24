@@ -21,7 +21,6 @@ public class Literal extends Expression {
 
   @Override
   public NFA toNFA(boolean debugOutput) {
-
     State neuStart = new State("neuStart");
     neuStart.setInitial(true);
     State neuFinal = new State("neuFinal");
@@ -43,19 +42,20 @@ public class Literal extends Expression {
   @Override
   public Set<String> getAlphabet() {
     Set<String> result = new HashSet<>();
-    result.add(c);
+    if (!c.equals("ε"))
+      result.add(c);
     return result;
   }
 
   @Override
   public boolean isNullable() {
-    return c.equals("\u03b5");
+    return c.equals("ε");
   }
 
   @Override
   public Set<Integer> getFirstPos() {
     Set<Integer> result = new HashSet<>();
-    if (!c.equals("\u03b5"))
+    if (!c.equals("ε"))
       result.add(Integer.valueOf(id));
     return result;
   }
@@ -67,15 +67,17 @@ public class Literal extends Expression {
 
   @Override
   protected void setId() {
-    if (!c.equals("\u03b5"))
+    if (!c.equals("ε"))
       this.id = getNextID();
   }
 
   @Override
   protected void calcFollowPos() {
-    if (!literalLookUp.containsKey(c)) {
-      literalLookUp.put(c, new HashSet<>());
+    if (this.id >= 0) {
+      if (!literalLookUp.containsKey(c)) {
+        literalLookUp.put(c, new HashSet<>());
+      }
+      literalLookUp.get(c).add(Integer.valueOf(this.id));
     }
-    literalLookUp.get(c).add(Integer.valueOf(this.id));
   }
 }

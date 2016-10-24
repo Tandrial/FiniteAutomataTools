@@ -94,9 +94,9 @@ public class Concat extends Expression {
   public Set<Integer> getLastPos() {
     if (lastPos != null)
       return lastPos;
-    lastPos = new HashSet<>(t2.getFirstPos());
+    lastPos = new HashSet<>(t2.getLastPos());
     if (t2.isNullable())
-      lastPos.addAll(t1.getFirstPos());
+      lastPos.addAll(t1.getLastPos());
     return lastPos;
   }
 
@@ -114,16 +114,11 @@ public class Concat extends Expression {
     // position i in lastpos(c_1), all positions in firstpos(c_2) are in
     // followpos(i).
 
-    // look at each cat-node, and put each position in firrstpos of its right
-    // child in followpos for each position in lastpos of its left child.
-    for (Integer follow : t2.getFirstPos()) {
-      for (Integer last : t1.getLastPos()) {
-        if (!followPosLookUp.containsKey(last)) {
-          followPosLookUp.put(last, new HashSet<>());
-        }
-        followPosLookUp.get(last).add(follow);
+    for (Integer last : t1.getLastPos()) {
+      if (!followPosLookUp.containsKey(last)) {
+        followPosLookUp.put(last, new HashSet<>());
       }
+      followPosLookUp.get(last).addAll(t2.getFirstPos());
     }
-
   }
 }
