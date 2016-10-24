@@ -1,6 +1,5 @@
 package de.mkrane.finiteAutomataTools.regularExpr;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -9,17 +8,18 @@ import java.util.Map;
 import java.util.Set;
 
 import de.mkrane.finiteAutomataTools.finiteAutomata.DFA;
+import de.mkrane.finiteAutomataTools.finiteAutomata.FiniteAutomata;
 import de.mkrane.finiteAutomataTools.finiteAutomata.NFA;
 import de.mkrane.finiteAutomataTools.finiteAutomata.State;
 import de.mkrane.finiteAutomataTools.finiteAutomata.StateCollection;
-import de.mkrane.finiteAutomataTools.parser.ParseException;
-import de.mkrane.finiteAutomataTools.parser.Parser;
 
 public abstract class Expression {
 
   protected static int                        nextID          = 1;
   protected static Map<Integer, Set<Integer>> followPosLookUp = new HashMap<>();;
   protected static Map<String, Set<Integer>>  literalLookUp   = new HashMap<>();;
+
+  private StringBuilder                       logger          = FiniteAutomata.logger;
 
   protected static int getNextID() {
     return nextID++;
@@ -44,8 +44,6 @@ public abstract class Expression {
   protected abstract void setId();
 
   public DFA toDFA() {
-    StringBuilder logger = new StringBuilder();
-
     DFA dfa = new DFA();
     dfa.addToAlphabet(this.getAlphabet());
     Expression.followPosLookUp.clear();
@@ -117,6 +115,7 @@ public abstract class Expression {
     dfa.renameStates();
 
     logger.append("[*] Done\n");
+    logger.append(dfa);
     System.out.println(logger.toString());
     return dfa;
   }
@@ -124,22 +123,5 @@ public abstract class Expression {
   public void printDebug(NFA nfa) {
     System.out.println("[*] " + this.getClass().getSimpleName() + " with L( " + this + " ):");
     System.out.println(nfa);
-  }
-
-  public static void main(String[] args) {
-    String s = "(a|b)*a(b)*";
-
-    try {
-      Expression e = Parser.parse(s);
-      DFA dfa_direkt = e.toDFA();
-      System.out.println(dfa_direkt);
-    } catch (UnsupportedEncodingException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    } catch (ParseException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }
-
   }
 }
