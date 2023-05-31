@@ -164,8 +164,8 @@ public abstract class FiniteAutomata {
     FiniteAutomata[] fas = new FiniteAutomata[] { dfa_min, dfa_direkt, dfa, nfa };
 
     String dotLocation;
-    if (System.getProperty("os.name").equals("Windows 7"))
-      dotLocation = "C:\\grahpviz\\bin\\dot.exe";
+    if (System.getProperty("os.name").contains("Windows"))
+      dotLocation = "C:\\graphviz\\bin\\dot.exe";
     else
       dotLocation = "dot";
 
